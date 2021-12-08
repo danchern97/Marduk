@@ -4,6 +4,8 @@
 import fitz
 # collect statistics on font size
 from collections import Counter
+import numpy as np
+
 
 def determine_text_type(fonts, line, text_bbox): 
     # determine text type by intersection with fonts classification
@@ -138,20 +140,47 @@ def get_fontsize_statistics(doc):
                         ])
     return Counter(fontSizes)
 
-def get_text_bbox(page): # rewrite: get actual text bbox for 
-    text_bbox = {
-        'left_col':{
-            'left':42,
-            'right':290
-        },
-        'right_col':{
-            'left':300,
-            'right':555
-        },
-        'top':50,
-        'bottom':710
-    }
-    return text_bbox
+def make_clusters(blocks, diff=5):
+
+    def match_cluster(bbox, cluster):
+        left = bbox[0]
+        right = bbox[2]
+        cluster_left = cluster["bboxes"][:, 0].mean()
+        cluster_right = cluster["bboxes"][:, 2].mean()
+        res = (abs(left - cluster_left) < diff) and (abs(right - cluster_right) < diff)
+        return res
+
+    clusters = []
+    for i, block in enumerate(blocks):
+        if block["type"] != 0:
+            continue
+        bbox = block["bbox"]
+        is_matched = False
+        for cluster in clusters:
+            if match_cluster(bbox, cluster):
+                cluster["bboxes"] = np.vstack((cluster["bboxes"], np.array(bbox)[np.newaxis]))
+                cluster["lines_count"] += len(block["lines"])
+                is_matched = True
+                break
+        if not is_matched:
+            cluster = dict()
+            cluster["bboxes"] = np.array(bbox)[np.newaxis]
+            cluster["lines_count"] = len(block["lines"])
+            clusters.append(cluster)
+    return clusters
+
+def get_text_bboxes(page, min_lines=15, diff=5): # rewrite: get actual text bbox for 
+    content = page.get_text('dict')
+    clusters = make_clusters(content["blocks"], diff=diff)
+    clusters = [
+        cluster for cluster in clusters if cluster["lines_count"] >= min_lines
+    ]
+    for cluster in clusters:
+        cluster["left"] = cluster["bboxes"][:, 0].min()
+        cluster["right"] = cluster["bboxes"][:, 2].max()
+        cluster["top"] = cluster["bboxes"][:, 1].min()
+        cluster["bottom"] = cluster["bboxes"][:, 3].max()
+    return clusters
 
 def classify_fonts(font_statistics, doc):
     # rewrite: choose fonts that are plainText, title, sectionTitle, subsectionTitle, etc.
