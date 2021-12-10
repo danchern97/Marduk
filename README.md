@@ -11,10 +11,10 @@ The features of the platform will include:
 We are very early stage.
 
 # ToDo
- [x] PDF parser
- [] Front-end demo
- [] Back-end 
- [] NN integration
+ - [x] PDF parser
+ - [ ] Front-end demo
+ - [ ] Back-end 
+ - [ ] NN integration
 
 # Requirements
 Other then `python>=3.6`, Marduk requires these packages to be installed:
