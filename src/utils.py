@@ -133,8 +133,9 @@ def get_fontsize_statistics(doc):
             if block['type'] == 0:
                 for line in block['lines']:
                     for span in line['spans']:
+                        tokens = list(filter(str.strip, span['text'].split(' ')))
                         fontSizes.extend([
-                            (span['font'], span['size']) for i in range(len(span['text'].split(' ')))
+                            (span['font'], span['size']) for i in range(len(tokens))
                         ])
     return Counter(fontSizes)
 
@@ -156,19 +157,32 @@ def get_text_bbox(page): # rewrite: get actual text bbox for
 def classify_fonts(font_statistics, doc):
     # rewrite: choose fonts that are plainText, title, sectionTitle, subsectionTitle, etc.
     fonts = {}
+
     # plain text fonts can be found by looking for text in the bounding boxes of plain text
-    fonts['plainText'] = [
-        ('BEAGLK+AdvPSFT-B', 7.970200061798096),
-        ('BEAGLM+AdvPSFT-L', 7.970200061798096), 
-        ('BEAGND+AdvPSMP13', 7.970200061798096), 
-        ('BEAGNB+AdvPSFT-LI', 7.970200061798096),
-        ('BEAGLP+AdvTTec369687+20', 7.970200061798096)
-    ]
+    font_mean = sum(font_statistics.values()) / len(font_statistics)
+    fonts['plainText'] = [font for font, count in font_statistics.items() if count >= font_mean]
+    # fonts['plainText'] = [
+    #     ('BEAGLK+AdvPSFT-B', 7.970200061798096),
+    #     ('BEAGLM+AdvPSFT-L', 7.970200061798096), 
+    #     ('BEAGND+AdvPSMP13', 7.970200061798096), 
+    #     ('BEAGNB+AdvPSFT-LI', 7.970200061798096),
+    #     ('BEAGLP+AdvTTec369687+20', 7.970200061798096)
+    # ]
+
     # title font can be found on the first page, by it's size or by intersection with metadata['title']
-    fonts['title'] = [
-        ('BEAGLK+AdvPSFT-B', 16.936399459838867), 
-        ('BEAGLL+AdvPSMP11', 16.936399459838867)
-    ]
+    title = doc.metadata['title']
+
+    for block in doc.get_page_text(0, 'dict')['blocks']:
+        if block['type'] == 0:
+            span = block['lines'][0]['spans'][0]
+            
+            if title.startswith(span['text']):
+                fonts['title'] = (span['font'], span['size'])
+    # fonts['title'] = [
+    #     ('BEAGLK+AdvPSFT-B', 16.936399459838867), 
+    #     ('BEAGLL+AdvPSMP11', 16.936399459838867)
+    # ]
+
     #  could be found by looking for higher sizes of text in the text bbox
     fonts['sectionTitle'] = [('BEAGLK+AdvPSFT-B', 9.962599754333496)] 
     fonts['subsectionTitle'] = [
