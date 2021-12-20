@@ -171,24 +171,63 @@ def classify_fonts(font_statistics, doc):
 
     # title font can be found on the first page, by it's size or by intersection with metadata['title']
     title = doc.metadata['title']
-
+    
+    if not title:
+        title = doc.get_toc()[0][1]
+ 
     for block in doc.get_page_text(0, 'dict')['blocks']:
         if block['type'] == 0:
             span = block['lines'][0]['spans'][0]
-            
+             
             if title.startswith(span['text']):
-                fonts['title'] = (span['font'], span['size'])
+                break
+
+    fonts['title'] = [(span['font'], span['size']) for line in block['lines'] for span in line['spans']]
+
     # fonts['title'] = [
     #     ('BEAGLK+AdvPSFT-B', 16.936399459838867), 
     #     ('BEAGLL+AdvPSMP11', 16.936399459838867)
     # ]
 
     #  could be found by looking for higher sizes of text in the text bbox
-    fonts['sectionTitle'] = [('BEAGLK+AdvPSFT-B', 9.962599754333496)] 
-    fonts['subsectionTitle'] = [
-        ('BEAGLK+AdvPSFT-B', 8.468199729919434),
-        ('BEAGLL+AdvPSMP11', 8.468199729919434)
-    ] 
+    fonts['sectionTitle'], fonts['subsectionTitle'] = [], []
+    known_fonts = fonts['plainText'] + fonts['title']
+
+    for page in doc:
+        blocks = page.get_text('dict')['blocks']
+        
+        for i in range(1, len(blocks) - 1):
+            if blocks[i]['type'] == 0:
+                span = blocks[i]['lines'][0]['spans'][0]
+
+                if (span['font'], span['size']) not in known_fonts:
+                    prev_is_plain, next_is_plain, prev_is_section = False, False, False
+
+                    if blocks[i - 1]['type'] == 0:
+                        prev_span = blocks[i - 1]['lines'][0]['spans'][0]
+                        prev_is_plain = (prev_span['font'], prev_span['size']) in fonts['plainText']
+                        prev_is_section = (prev_span['font'], prev_span['size']) in fonts['sectionTitle']
+
+                    if blocks[i + 1]['type'] == 0:
+                        next_span = blocks[i + 1]['lines'][0]['spans'][0]
+                        next_is_plain = (next_span['font'], next_span['size']) in fonts['plainText']
+                
+                    if next_is_plain and (prev_is_plain or prev_is_section):
+                        
+                        if prev_is_plain:
+                            fonts['sectionTitle'].append((span['font'], span['size']))
+                        
+                        elif prev_is_section:
+                            fonts['subsectionTitle'].append((span['font'], span['size']))
+                        
+                        known_fonts.append((span['font'], span['size']))
+
+    # fonts['sectionTitle'] = [('BEAGLK+AdvPSFT-B', 9.962599754333496)] 
+    # fonts['subsectionTitle'] = [
+    #     ('BEAGLK+AdvPSFT-B', 8.468199729919434),
+    #     ('BEAGLL+AdvPSMP11', 8.468199729919434)
+    # ]
+    
     return fonts
 
 def join_pages(pages): 
