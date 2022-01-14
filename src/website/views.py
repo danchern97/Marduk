@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, send_file
+from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Project
 from .utils import create_empty_table, serialize_project
@@ -41,7 +41,7 @@ def download_project(project_id):
     project = Project.query.get(project_id).first()
     if project:
         if project.user_id == current_user.id:
-            return send_file(serialize_project(project))
+            return serialize_project(project)
 
 @views.route('/<project_id>', methods=['GET', 'POST'])
 def project():

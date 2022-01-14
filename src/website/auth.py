@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
+from .utils import send_email
 from . import db
 
 auth = Blueprint("auth", __name__)
@@ -31,6 +32,18 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def reset():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            send_email(email)
+            flush(f"To reset your password, follow instructions sent to {email}!")
+            return redirect(url_for('auth.login'))
+    return render_template('reset.html')
+
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():

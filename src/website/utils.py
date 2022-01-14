@@ -1,6 +1,9 @@
 #
 import json
 
+def send_email(email):
+    pass
+
 def serialize_project(project):
     return json.loads(project.table)
 
