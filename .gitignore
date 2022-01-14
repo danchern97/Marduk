@@ -1,0 +1,4 @@
+src/website/config.json
+.env/*
+test_data/*
+.DS_Store
