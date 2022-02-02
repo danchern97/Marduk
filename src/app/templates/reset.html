@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth">
+	<div class="auth-block">
+		<a href="/"><img src="/static/assets/img/marduk-logo-full.png" class="auth-logo" alt="Marduk logo"></a>
+		<form class="auth-form" action="" method="POST" name="reset" novalidate>
+			{{ form.hidden_tag() }}
+			{{ form.email(size=32, placeholder="Your email") }}
+			{% for error in form.email.errors %}
+				<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}
+			<button type="submit" class="auth-form_button" id="register-submit">Reset password</button>
+		</form>
+	</div>
+</section>
+{% endblock %}

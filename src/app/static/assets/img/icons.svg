@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg>
+
+<symbol id="ham" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1="1.5" y1="1.5" x2="18.5" y2="1.5" stroke="#646464" stroke-width="3" stroke-linecap="round"/>
+<line x1="1.5" y1="8.5" x2="18.5" y2="8.5" stroke="#646464" stroke-width="3" stroke-linecap="round"/>
+<line x1="1.5" y1="15.5" x2="18.5" y2="15.5" stroke="#646464" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="user" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="19.5" cy="19.5" r="19.5" fill="#CE9B69"/>
+<path d="M25.6285 11.7C25.6285 14.4693 23.1341 16.7143 20.0571 16.7143C16.9801 16.7143 14.4857 14.4693 14.4857 11.7C14.4857 8.9307 16.9801 6.68573 20.0571 6.68573C23.1341 6.68573 25.6285 8.9307 25.6285 11.7Z" fill="#FFF8F8"/>
+<path d="M28.9714 27.8572C28.9714 32.7804 24.7309 36.7714 19.5 36.7714C14.2691 36.7714 10.0286 32.7804 10.0286 27.8572C10.0286 22.9339 14.2691 18.9429 19.5 18.9429C24.7309 18.9429 28.9714 22.9339 28.9714 27.8572Z" fill="#FFF8F8"/>
+</symbol>
+
+<symbol id="down" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1="6" y1="1.00085" x2="6" y2="9.00085" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="10" y1="1.00085" x2="10" y2="9.00085" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<path d="M7.29289 16.708C7.68342 17.0985 8.31658 17.0985 8.70711 16.708L15.0711 10.344C15.4616 9.95348 15.4616 9.32031 15.0711 8.92979C14.6805 8.53926 14.0474 8.53926 13.6569 8.92979L8 14.5866L2.34315 8.92979C1.95262 8.53926 1.31946 8.53926 0.928932 8.92979C0.538408 9.32031 0.538408 9.95348 0.928932 10.344L7.29289 16.708ZM7 15.0009V16.0009H9V15.0009H7Z" fill="currentColor"/>
+</symbol>
+
+<symbol id="trash" aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-trash fa-w-14 fa-3x"><path fill="currentColor" d="M432 80h-82.4l-34-56.7A48 48 0 0 0 274.4 0H173.6a48 48 0 0 0-41.2 23.3L98.4 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16l21.2 339a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM173.6 48h100.8l19.2 32H154.4zm173.3 416H101.11l-21-336h287.8z" class=""></path></symbol>
+
+</svg>

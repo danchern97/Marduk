@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth">
+	<div class="auth-block">
+		<a href="/"><img src="/static/assets/img/marduk-logo-full.png" class="auth-logo" alt="Marduk logo"></a>
+		<form class="auth-form" action="" method="POST" name="register" novalidate>
+			{{ form.hidden_tag() }}
+			{{ form.email(size=32, placeholder="Email") }}
+			{% for error in form.email.errors %}
+				<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}
+			{{ form.password(size=32, placeholder="Password") }}
+			{% for error in form.password.errors %}
+				<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}
+			{{ form.confirmpassword(size=32, placeholder="Confirm password") }}
+			{% for error in form.confirmpassword.errors %}
+				<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}
+			<button type="submit" class="auth-form_button" id="register-submit">Register</button>
+		</form>
+		<div class="auth-links">
+			<a href="/">Already have an account? Log in</a><br/>
+		</div>
+	</div>
+</section>
+{% endblock %}

@@ -1,4 +1,7 @@
-src/website/config.json
+src/app/config.json
 .env/*
 test_data/*
+*.db
 .DS_Store
+src/app/__pycache__/*
+src/app/temp/*

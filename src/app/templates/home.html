@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'header.html' %}
+<section class="projects">
+	<div class="container">
+		<div class="projects-block">
+			<div class="projects-new">
+				<form class="projects-new-form" action="" style="display:none;" method="POST" name="project" novalidate>
+					{{ form.hidden_tag() }}
+					{{ form.project_name(size=32) }}
+					<button type="submit" class="btn-grey">Create project</button>
+				</form>
+				<button class="btn-grey projects-new-btn">New project</button>
+			</div>
+			<div class="projects-list">
+				{% for project in user.projects %}
+				<div class="projects-list-item btn-grey">
+					<a href="/{{project.id}}" class="projects-list-item-link">{{project.name}}</a>
+					<div class="projects-list-item-menu">
+						<a href="/uploads/{{project.id}}" class="projects-list-item-download" title="Download"><svg ><use xlink:href="/static/assets/img/icons.svg#down"></use></svg></a>
+						<a href="/delete/{{project.id}}" class="projects-list-item-delete" title="Delete"><svg ><use xlink:href="/static/assets/img/icons.svg#trash"></use></svg></a>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
